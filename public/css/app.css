@@ -10932,3 +10932,8 @@ a.text-dark:focus {
   }
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
