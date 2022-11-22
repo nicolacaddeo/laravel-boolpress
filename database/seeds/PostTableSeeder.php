@@ -18,6 +18,7 @@ class PostTableSeeder extends Seeder
             $post = new Post();
             $post->title = $faker->realText($maxNbChars = 200, $indexSize = 2);
             $post->content = $faker->text();
+            $post->category_id = $faker->numberBetween(1,7);
             $slug = Str::slug($post->title);
             $slug_base = $slug;
             $existingslug = Post::where('slug', $slug)->first();
