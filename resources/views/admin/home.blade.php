@@ -6,5 +6,6 @@
         <a class="btn btn-success mx-2" href="{{ route('admin.posts.index') }}">Posts</a>
         <a class="btn btn-primary" href="{{ route('admin.posts.create') }}">Create Post</a>
         <a class="btn btn-danger mx-2" href="{{ route('admin.categories.index') }}">Categories</a>
+        <a class="btn btn-success mx-2" href="{{ route('admin.tags.index') }}">Tags</a>
     </div>
 @endsection
