@@ -1914,12 +1914,26 @@ __webpack_require__.r(__webpack_exports__);
     return {};
   },
   props: {
-    posts: Array
+    paginatedPosts: Object
+  },
+  computed: {
+    posts: function posts() {
+      return this.paginatedPosts.data;
+    },
+    currentPage: function currentPage() {
+      return this.paginatedPosts.current_page;
+    },
+    totalPage: function totalPage() {
+      return this.paginatedPosts.total;
+    }
   },
   mounted: function mounted() {},
   methods: {
     viewPost: function viewPost(id) {
       this.$emit('selectedPost', id);
+    },
+    getPage: function getPage(url) {
+      this.$emit('requestPage', url);
     }
   }
 });
@@ -1947,29 +1961,34 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      posts: [],
+      posts: undefined,
       postDetail: undefined,
       loading: true
     };
   },
   mounted: function mounted() {
-    var _this = this;
-    axios.get('/api/posts').then(function (_ref) {
-      var data = _ref.data;
-      if (data.success) {
-        _this.posts = data.results;
-      }
-      _this.loading = false;
-    });
+    this.loadPage('/api/posts');
   },
   methods: {
     viewPost: function viewPost(id) {
-      var _this2 = this;
+      var _this = this;
       axios.get('/api/posts/' + id).then(function (response) {
         console.log(response);
-        _this2.postDetail = response.data.success ? response.data.results : undefined;
+        _this.postDetail = response.data.success ? response.data.results : undefined;
       })["catch"](function (e) {
         console.log(e);
+      });
+    },
+    loadPage: function loadPage(url) {
+      var _this2 = this;
+      axios.get(url).then(function (_ref) {
+        var data = _ref.data;
+        if (data.success) {
+          console.log(data);
+          console.log('clicked');
+          _this2.posts = data.results;
+        }
+        _this2.loading = false;
       });
     }
   }
@@ -2034,7 +2053,7 @@ __webpack_require__.r(__webpack_exports__);
 var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
-  return _c("div", [_c("ol", _vm._l(_vm.posts, function (post) {
+  return _c("div", [_c("div", [_c("ol", _vm._l(_vm.posts, function (post) {
     return _c("li", {
       key: post.id,
       on: {
@@ -2042,8 +2061,22 @@ var render = function render() {
           return _vm.viewPost(post.id);
         }
       }
-    }, [_vm._v("\n            " + _vm._s(post.title) + "\n        ")]);
-  }), 0)]);
+    }, [_vm._v("\n                " + _vm._s(post.title) + "\n            ")]);
+  }), 0)]), _vm._v(" "), _c("div", {
+    staticClass: "pages"
+  }, [_c("button", {
+    on: {
+      click: function click($event) {
+        return _vm.getPage(_vm.paginatedPosts.prev_page_url);
+      }
+    }
+  }, [_vm._v("Previous")]), _vm._v("\n\n        Pagina: " + _vm._s(_vm.currentPage) + " di " + _vm._s(_vm.totalPage) + "\n\n        "), _c("button", {
+    on: {
+      click: function click($event) {
+        return _vm.getPage(_vm.paginatedPosts.next_page_url);
+      }
+    }
+  }, [_vm._v("Next")])])]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -2069,10 +2102,11 @@ var render = function render() {
     staticClass: "posts-container"
   }, [_c("PostListComponent", {
     attrs: {
-      posts: _vm.posts
+      paginatedPosts: _vm.posts
     },
     on: {
-      selectedPost: _vm.viewPost
+      selectedPost: _vm.viewPost,
+      requestPage: _vm.loadPage
     }
   })], 1) : _c("div", [_c("ShowPostComponent", {
     attrs: {

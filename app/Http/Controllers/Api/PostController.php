@@ -17,7 +17,7 @@ class PostController extends Controller
     {
 
         try{
-            $posts = Post::all();
+            $posts = Post::paginate(2); // richiede 2 elementi per pagina
             $data = [
                 'results' => $posts,
                 'success' => true

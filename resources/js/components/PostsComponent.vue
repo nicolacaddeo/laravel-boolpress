@@ -3,7 +3,7 @@
         <div v-if="loading"> Loading... </div>
 
         <div v-else-if="!postDetail" class="posts-container">
-            <PostListComponent :posts="posts" @selectedPost="viewPost" />
+            <PostListComponent :paginatedPosts="posts" @selectedPost="viewPost" @requestPage="loadPage" />
         </div>
 
         <div v-else>
@@ -26,20 +26,14 @@ export default {
 
     data() {
         return {
-            posts: [],
+            posts: undefined,
             postDetail: undefined,
             loading: true
         };
     },
 
     mounted() {
-        axios.get('/api/posts').then(({ data }) => {
-            if (data.success) {
-                this.posts = data.results;
-            }
-
-            this.loading = false;
-        })
+        this.loadPage('/api/posts');
     },
 
     methods: {
@@ -49,6 +43,17 @@ export default {
                 this.postDetail = response.data.success ? response.data.results : undefined;
             }).catch(e => {
                 console.log(e);
+            })
+        },
+        loadPage(url) {
+            axios.get(url).then(({ data }) => {
+                if (data.success) {
+                    console.log(data);
+                    console.log('clicked');
+                    this.posts = data.results;
+                }
+
+                this.loading = false;
             })
         }
     },
