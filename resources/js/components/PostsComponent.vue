@@ -10,6 +10,8 @@
             <ShowPostComponent :post="postDetail" />
             <button @click="postDetail = undefined">Back</button>
         </div>
+
+
     </div>
 </template>
 
@@ -67,5 +69,7 @@ export default {
 
 }
 </style>
+
+
 
 
