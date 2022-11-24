@@ -50853,7 +50853,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\Nicola\Desktop\BOOLEAN\Esercizi_backend\laravel_api\resources\js\front.js */"./resources/js/front.js");
+module.exports = __webpack_require__(/*! C:\Users\Nicola\Desktop\BOOLEAN\Esercizi_backend\laravel-boolpress\resources\js\front.js */"./resources/js/front.js");
 
 
 /***/ })
